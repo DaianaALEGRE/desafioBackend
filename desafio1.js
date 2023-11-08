@@ -4,10 +4,10 @@ class ProductManager {
   constructor() {
     this.products = [];
     this.nextProductId = 1;
-    this.loadProducts(); // Carga los productos desde el archivo al crear una instancia.
+    this.loadProducts(); 
   }
 
-  // Método para agregar un producto.
+
   addProduct(product) {
     const { title, description, price, thumbnail, code, stock } = product;
   
@@ -36,12 +36,12 @@ class ProductManager {
     this.saveProducts();
     console.log("Producto agregado con éxito.");
   }
-  // Método para obtener todos los productos.
+
   getProducts() {
     return this.products;
   }
 
-  // Método para obtener un producto por su ID.
+
   getById(id) {
     const product = this.products.find((p) => p.id === id);
     if (!product) {
@@ -50,7 +50,6 @@ class ProductManager {
     return product;
   }
 
-  // Método para eliminar un producto por su ID.
   deleteProduct(id) {
     const index = this.products.findIndex((p) => p.id === id);
     if (index === -1) {
@@ -59,11 +58,11 @@ class ProductManager {
     }
 
     this.products.splice(index, 1);
-    this.saveProducts(); // Guarda los productos actualizados en el archivo.
+    this.saveProducts(); 
     console.log("Producto eliminado con éxito.");
   }
 
-  // Método para actualizar un producto por su ID.
+  
   updateProduct(id, updatedFields) {
     const productIndex = this.products.findIndex((p) => p.id === id);
     if (productIndex === -1) {
@@ -73,15 +72,14 @@ class ProductManager {
 
     const productToUpdate = this.products[productIndex];
 
-    // Actualiza los campos especificados (sin borrar el 'id').
     Object.assign(productToUpdate, updatedFields);
 
     this.products[productIndex] = productToUpdate;
-    this.saveProducts(); // Guarda los productos actualizados en el archivo.
+    this.saveProducts(); 
     console.log("Producto actualizado con éxito.");
   }
 
-  // Método para cargar productos desde un archivo.
+  
   loadProducts() {
     try {
       const data = fs.readFileSync('products.json', 'utf8');
@@ -90,13 +88,12 @@ class ProductManager {
         this.nextProductId = Math.max(...this.products.map((p) => p.id)) + 1;
       }
     } catch (error) {
-      // Si hay un error al leer el archivo, se asume que no hay datos y se continúa con productos vacíos.
+      
       console.log("No se pudo cargar el archivo de productos. Iniciando con lista vacía.");
       this.products = [];
     }
   }
 
-  // Método para guardar productos en un archivo.
   saveProducts() {
     const data = JSON.stringify(this.products, null, 2);
     fs.writeFileSync('products.json', data, 'utf8');
@@ -105,7 +102,6 @@ class ProductManager {
 
 const manager = new ProductManager();
 
-// Agregar productos de ejemplo.
 manager.addProduct({
   title: 'Producto prueba 1',
   description: 'esto es un producto de prueba',
@@ -124,26 +120,24 @@ manager.addProduct({
   stock: 12,
 });
 
-// Obtener un producto por ID.
 const productById = manager.getById(1);
 console.log(productById);
 
-// Eliminar un producto por ID.
 manager.deleteProduct(1);
 console.log("Producto eliminado");
 
-// Actualizar un producto por ID.
+
 manager.updateProduct(2, {
   title: 'Nuevo título',
   price: 50,
 });
 console.log("Producto actualizado");
 
-// Obtener el producto actualizado.
+
 const updatedProduct = manager.getById(2);
 console.log(updatedProduct);
 
-// Obtener la lista de todos los productos.
+
 const allProducts = manager.getProducts();
 console.log("Lista de productos:");
 console.log(allProducts);
