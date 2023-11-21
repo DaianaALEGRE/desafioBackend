@@ -1,12 +1,12 @@
 {
   "name": "desafioback",
   "version": "1.0.0",
-  "main": "desafio1.js",
+  "main": "products-server.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon /desafio1"
-  
+  "scripts": {"dev": "nodemon products-server.js",
+  "start": "node products-server.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+    
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/DaianaALEGRE/desafioBackend#readme",
   "description": "",
   "dependencies": {
+    "express": "^4.18.2",
     "nodemon": "^3.0.1"
   }
 }
