@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 
 class ProductManager {
   constructor() {
@@ -6,7 +6,6 @@ class ProductManager {
     this.nextProductId = 1;
     this.loadProducts(); 
   }
-
 
   addProduct(product) {
     const { title, description, price, thumbnail, code, stock } = product;
@@ -41,7 +40,6 @@ class ProductManager {
     return this.products;
   }
 
-
   getById(id) {
     const product = this.products.find((p) => p.id === id);
     if (!product) {
@@ -49,7 +47,6 @@ class ProductManager {
     }
     return product;
   }
-
   deleteProduct(id) {
     const index = this.products.findIndex((p) => p.id === id);
     if (index === -1) {
@@ -62,7 +59,6 @@ class ProductManager {
     console.log("Producto eliminado con éxito.");
   }
 
-  
   updateProduct(id, updatedFields) {
     const productIndex = this.products.findIndex((p) => p.id === id);
     if (productIndex === -1) {
@@ -79,14 +75,14 @@ class ProductManager {
     console.log("Producto actualizado con éxito.");
   }
 
-  
-  loadProducts() {
+  async loadProducts() {
     try {
-      const data = fs.readFileSync('products.json', 'utf8');
+      const data = await fs.readFile('products.json', 'utf8');
       this.products = JSON.parse(data);
       if (this.products.length > 0) {
         this.nextProductId = Math.max(...this.products.map((p) => p.id)) + 1;
       }
+      console.log("Productos cargados con éxito.");
     } catch (error) {
       
       console.log("No se pudo cargar el archivo de productos. Iniciando con lista vacía.");
@@ -94,9 +90,15 @@ class ProductManager {
     }
   }
 
-  saveProducts() {
+
+  async saveProducts() {
     const data = JSON.stringify(this.products, null, 2);
-    fs.writeFileSync('products.json', data, 'utf8');
+    try {
+      await fs.writeFile('products.json', data, 'utf8');
+      console.log("Productos guardados con éxito.");
+    } catch (error) {
+      console.log("Error al guardar productos:", error.message);
+    }
   }
 }
 
@@ -126,17 +128,14 @@ console.log(productById);
 manager.deleteProduct(1);
 console.log("Producto eliminado");
 
-
 manager.updateProduct(2, {
   title: 'Nuevo título',
   price: 50,
 });
 console.log("Producto actualizado");
 
-
 const updatedProduct = manager.getById(2);
 console.log(updatedProduct);
-
 
 const allProducts = manager.getProducts();
 console.log("Lista de productos:");
